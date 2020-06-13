@@ -34,6 +34,11 @@ CGFloat reversedModuleValueForValue(CGFloat moduleValue)
 
 @implementation WhitePointModule
 
++(void)load
+{
+    return;
+}
+
 - (instancetype)init
 {
 	self = [super init];
@@ -50,6 +55,10 @@ CGFloat reversedModuleValueForValue(CGFloat moduleValue)
 
 	[self updatePrefs];
 
+    LAActivator *la = [LAActivator sharedInstance];
+    [la registerListener:self forName:@"com.opa334.whitepointmodule.enable"];
+    [la registerListener:self forName:@"com.opa334.whitepointmodule.disable"];
+    
 	return self;
 }
 
@@ -107,6 +116,53 @@ CGFloat reversedModuleValueForValue(CGFloat moduleValue)
 	//I reversed the PreferenceBundle of the accessibility settings and saw that it was calling it (probably... I don't know for sure)
 
 	_ignoreUpdates = NO;
+}
+
+- (NSString *)activator:(LAActivator *)activator requiresLocalizedGroupForListenerName:(NSString *)listenerName {
+    return @"White Point Module";
+}
+
+- (NSString *)activator:(LAActivator *)activator requiresLocalizedTitleForListenerName:(NSString *)listenerName {
+    if ([listenerName isEqualToString:@"com.opa334.whitepointmodule.enable"]){
+        return @"Enable";
+    }else{
+        return @"Disable";
+    }
+}
+
+- (NSString *)activator:(LAActivator *)activator requiresLocalizedDescriptionForListenerName:(NSString *)listenerName {
+    if ([listenerName isEqualToString:@"com.opa334.whitepointmodule.enable"]){
+        return @"Turn on white point reduction";
+    }else{
+        return @"Turn off white point reduction";
+    }
+}
+
+
+- (UIImage *)activator:(LAActivator *)activator requiresIconForListenerName:(NSString *)listenerName scale:(CGFloat)scale{
+    UIImage *icon = [[UIImage alloc] init];
+    if (scale == 3.0f){
+        icon = [UIImage imageWithContentsOfFile:@"/Library/ControlCenter/Bundles/WhitePointModule.bundle/SettingsIcon@3x.png"];
+    }else{
+        icon = [UIImage imageWithContentsOfFile:@"/Library/ControlCenter/Bundles/WhitePointModule.bundle/SettingsIcon@2x.png"];
+    }
+    return icon;
+}
+- (UIImage *)activator:(LAActivator *)activator requiresSmallIconForListenerName:(NSString *)listenerName scale:(CGFloat)scale{
+    UIImage *icon = [[UIImage alloc] init];
+    if (scale == 3.0f){
+        icon = [UIImage imageWithContentsOfFile:@"/Library/ControlCenter/Bundles/WhitePointModule.bundle/SettingsIcon@3x.png"];
+    }else{
+        icon = [UIImage imageWithContentsOfFile:@"/Library/ControlCenter/Bundles/WhitePointModule.bundle/SettingsIcon@2x.png"];
+    }
+    return icon;
+}
+- (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event forListenerName:(NSString *)listenerName{
+    if ([listenerName isEqualToString:@"com.opa334.whitepointmodule.enable"]){
+        [AXSettings sharedInstance].reduceWhitePointEnabled = YES;
+    }else{
+        [AXSettings sharedInstance].reduceWhitePointEnabled = NO;
+    }
 }
 
 @end

@@ -1,3 +1,6 @@
+DEBUG=0
+FINALPACKAGE=1
+
 include $(THEOS)/makefiles/common.mk
 
 export TARGET = iphone:clang:12.1.2:11.0
@@ -8,6 +11,7 @@ WhitePointModule_BUNDLE_EXTENSION = bundle
 WhitePointModule_FILES = $(wildcard *.m)
 WhitePointModule_FRAMEWORKS = MediaAccessibility Preferences
 WhitePointModule_PRIVATE_FRAMEWORKS = ControlCenterUIKit AccessibilityUtilities
+WhitePointModule_LIBRARIES = activator
 WhitePointModule_CFLAGS = -fobjc-arc
 WhitePointModule_INSTALL_PATH = /Library/ControlCenter/Bundles/
 

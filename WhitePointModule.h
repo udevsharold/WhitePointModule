@@ -3,10 +3,12 @@
 
 #import <ControlCenterUIKit/CCUIContentModule.h>
 
+#import "libactivator/libactivator.h"
+
 extern CGFloat whitePointIntensityValueForModuleValue(CGFloat moduleValue);
 extern CGFloat moduleValueForWhitePointIntensityValue(CGFloat whitePointIntensityValue);
 
-@interface WhitePointModule : NSObject <CCUIContentModule>
+@interface WhitePointModule : NSObject <CCUIContentModule, LAListener>
 {
 	NSUserDefaults* _preferences;
 	BOOL _ignoreUpdates;
